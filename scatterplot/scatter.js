@@ -56,7 +56,6 @@ async function drawScatter() {
         .attr("cy", d => y_scale(y_accessor(d)))
         .attr("r", 5)
         .attr("fill", "skyblue");
-
 }
 
 drawScatter();
