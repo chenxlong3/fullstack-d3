@@ -40,7 +40,7 @@ async function drawLineChart() {
     .domain(d3.extent(dataset, yAccessor))
     .range([dimensions.boundedHeight, 0]);
     
-
+    
 
 }
 
