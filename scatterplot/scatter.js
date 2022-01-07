@@ -39,7 +39,8 @@ async function drawScatter() {
         .domain(d3.extent(dataset, y_accessor))
         .range([dimensions.bounded_height, 0])
         .nice();
-
+    
+    // Using loop
     // dataset.foreach(d => {
     //     bounds
     //     .append("circle")
@@ -48,14 +49,63 @@ async function drawScatter() {
     //     .attr("r", 5);
     // });
 
-    const dots = bounds.selectAll("circle")
-        .data(dataset)
-        .enter()
-        .append("circle")
+    // const dots = bounds.selectAll("circle")
+    //     .data(dataset)
+    //     .enter()
+    //     .append("circle")
+    //     .attr("cx", d => x_scale(x_accessor(d)))
+    //     .attr("cy", d => y_scale(y_accessor(d)))
+    //     .attr("r", 5)
+    //     .attr("fill", "skyblue");
+    function drawDot(dataset, color) {
+        const dots = bounds.selectAll("circle").data(dataset);
+    
+        dots.enter().append("circle")
+        .merge(dots)
         .attr("cx", d => x_scale(x_accessor(d)))
         .attr("cy", d => y_scale(y_accessor(d)))
-        .attr("r", 5)
-        .attr("fill", "skyblue");
+        .attr("r", 10)
+        .attr("fill", color);
+    }
+    // drawDot(dataset.slice(0, 200), "grey");
+    // setTimeout(() => {
+    //     drawDot(dataset, "cornflowerblue")
+    // }, 1000);
+    // Draw Peripherals
+    const x_axis_gen = d3.axisBottom().scale(x_scale);
+    const x_axis = bounds.append("g")
+    .call(x_axis_gen)
+    .style("transform", `translateY(${dimensions.bounded_height}px)`);
+    // coordinates are relative to the x_axis
+    const x_label = x_axis.append("text")
+    .attr("x", dimensions.bounded_width / 2)
+    .attr("y", dimensions.margin.bottom - 10)
+    .attr("fill", "black")
+    .style("font-size", "1.4em")
+    .html("Dew point (&deg;F)");
+
+    const y_axis_gen = d3.axisLeft().scale(y_scale).ticks(4);
+    const y_axis = bounds.append("g")
+    .call(y_axis_gen);
+    
+    // coordinates?
+    const y_label = y_axis.append("text")
+    .attr("x", -dimensions.bounded_height / 2)
+    .attr("y", -dimensions.margin.left + 10)
+    .attr("fill", "black")
+    .style("font-size", "1.4em")
+    .text("Relative humidity")
+    .style("transform", "rotate(-90deg)")
+    .style("text-anchor", "middle");
+    
+    const color_accessor = d => d.cloudCover;
+    const color_scale = d3.scaleLinear()
+    .domain(d3.extent(dataset, color_accessor))
+    .range(["skyblue", "darkslategrey"]);
+    
+    drawDot(dataset, d => color_scale(color_accessor(d)));
+
 }
+
 
 drawScatter();
