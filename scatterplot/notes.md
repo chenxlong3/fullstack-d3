@@ -19,3 +19,4 @@
 
 
 ## Data join
+When .data() is called, we are joining our selected elements with our array of data points. The returned selection will have a list of existing elements, new elements that need to be added, and old elements that need to be removed.
