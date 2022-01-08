@@ -109,7 +109,8 @@ async function barChart() {
             .attr("fill", "black")
             .style("font-size", "1.4em")
             .text(metric)
-            .style("text-transform", "capitalize")
+            .style("text-transform", "capitalize");
+
     }
     metrics.forEach(drawHist);
 }
